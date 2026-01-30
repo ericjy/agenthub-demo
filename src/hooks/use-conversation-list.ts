@@ -7,22 +7,15 @@ import {
 } from '@/app/actions/conversations';
 import { UIMessage } from '@ai-sdk/react';
 import { useCallback, useEffect, useState } from 'react';
+import { Conversation } from '@/lib/conversation-repository';
 
-/**
- * Conversation UI representation
- */
-export interface ConversationListItem {
-  id: string;
-  createdAt: number;
-  title?: string;
-}
 
 export function useConversationList() {
 
   /**
    * UI state for conversation list
    */
-  const [conversationList, setConversationList] = useState<ConversationListItem[]>([]);
+  const [conversationList, setConversationList] = useState<Conversation[]>([]);
 
   /**
    * UI state of the active conversation
@@ -36,7 +29,7 @@ export function useConversationList() {
     const result = await listConversations(DEFAULT_USER_ID);
     if (result.data) {
       const sortedConversations = [...result.data].sort(
-        (a: ConversationListItem, b: ConversationListItem) => b.createdAt - a.createdAt
+        (a: Conversation, b: Conversation) => b.createdAt - a.createdAt
       );
       setConversationList(sortedConversations);
     } else if (result.error) {

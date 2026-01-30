@@ -1,14 +1,13 @@
 'use server';
 
-import { createAndRegisterConversation, listConversationsByUserId } from '@/lib/conversation-service';
-import { retrieveOpenAIConversationItems } from '@/lib/oci-openai';
+import { conversationService } from '@/lib/conversation-service';
 
 /**
  * List all conversations for a user
  */
 export async function listConversations(userId: string) {
   try {
-    const conversations = await listConversationsByUserId(userId);
+    const conversations = await conversationService.listConversations(userId);
     console.log(`Fetching conversations. Registry contains ${conversations.length} items for user ${userId}`);
     return { data: conversations };
   } catch (error) {
@@ -25,7 +24,7 @@ export async function createConversation(userId: string) {
     if (!userId) {
       return { error: 'userId is required' };
     }
-    const conversation = await createAndRegisterConversation(userId);
+    const conversation = await conversationService.createConversation(userId);
     return { data: conversation };
   } catch (error: any) {
     console.error('Error creating conversation:', error);
@@ -41,7 +40,7 @@ export async function getConversationHistory(conversationId: string) {
     if (!conversationId) {
       return { error: 'Conversation ID is required' };
     }
-    const items = await retrieveOpenAIConversationItems(conversationId);
+    const items = await conversationService.getConversationHistory(conversationId);
     console.log('Conversation items:', items);
     return { data: items };
   } catch (error) {

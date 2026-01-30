@@ -6,7 +6,7 @@
  * This layer is responsible for storing the mapping of conversation IDs to user IDs, and the retrieval of conversations for a user.
  * This layer may be used to store other metadata about the conversation, such as summarized conversation name, etc.
  */
-export interface ConversationRegistryItem {
+export interface Conversation {
   id: string;
   userId: string;
   createdAt: number;
@@ -14,8 +14,8 @@ export interface ConversationRegistryItem {
 }
 
 // Using global to persist across hot reloads in development
-const globalForConversationRegistry = global as unknown as { conversationRegistry: ConversationRegistryItem[] };
+const globalStore = global as unknown as { conversationRepository: Conversation[] };
 
-export const conversationRegistry = globalForConversationRegistry.conversationRegistry || [];
+export const conversationRepository = globalStore.conversationRepository || [];
 
-if (process.env.NODE_ENV !== 'production') globalForConversationRegistry.conversationRegistry = conversationRegistry;
+if (process.env.NODE_ENV !== 'production') globalStore.conversationRepository = conversationRepository;

@@ -1,4 +1,4 @@
-import { assignConversationTitleIfAbsent } from '@/lib/conversation-service';
+import { conversationService } from '@/lib/conversation-service';
 import { ociOpenAI } from '@/lib/oci-openai';
 import { openai, OpenAIResponsesProviderOptions } from '@ai-sdk/openai';
 import { streamText } from 'ai';
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
       } satisfies OpenAIResponsesProviderOptions,
     },
     onFinish: () => {
-      assignConversationTitleIfAbsent(conversationId, userMessage);
+      conversationService.assignConversationTitleIfAbsent(conversationId, userMessage);
     },
     onError: (error) => {
       console.error('Stream error:', error);
