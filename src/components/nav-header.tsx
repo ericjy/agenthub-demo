@@ -19,9 +19,7 @@ export function NavHeader() {
           className="group-data-[collapsible=icon]:hidden"
         >
           <a href="#">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-              <LayoutGrid className="size-4" />
-            </div>
+            <LayoutGrid className="size-3" />
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-semibold">Agent Hub Demo</span>
             </div>

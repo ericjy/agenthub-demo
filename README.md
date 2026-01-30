@@ -28,4 +28,6 @@ pnpm add --save-dev eslint-config-prettier
 pnpm add zod
 pnpm dlx shadcn@latest init
 pnpm dlx shadcn@latest add sidebar
+pnpm add ai @ai-sdk/react @ai-sdk/openai
+npx ai-elements@latest
 ```
