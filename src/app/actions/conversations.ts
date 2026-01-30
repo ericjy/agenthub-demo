@@ -1,0 +1,51 @@
+'use server';
+
+import { createAndRegisterConversation, listConversationsByUserId } from '@/lib/conversation-service';
+import { retrieveOpenAIConversationItems } from '@/lib/oci-openai';
+
+/**
+ * List all conversations for a user
+ */
+export async function listConversations(userId: string) {
+  try {
+    const conversations = await listConversationsByUserId(userId);
+    console.log(`Fetching conversations. Registry contains ${conversations.length} items for user ${userId}`);
+    return { data: conversations };
+  } catch (error) {
+    console.error('Error fetching conversations:', error);
+    return { error: 'Failed to fetch conversations' };
+  }
+}
+
+/**
+ * Create a new conversation for a user
+ */
+export async function createConversation(userId: string) {
+  try {
+    if (!userId) {
+      return { error: 'userId is required' };
+    }
+    const conversation = await createAndRegisterConversation(userId);
+    return { data: conversation };
+  } catch (error: any) {
+    console.error('Error creating conversation:', error);
+    return { error: error.message || 'Failed to create conversation' };
+  }
+}
+
+/**
+ * Get conversation history by ID
+ */
+export async function getConversationHistory(conversationId: string) {
+  try {
+    if (!conversationId) {
+      return { error: 'Conversation ID is required' };
+    }
+    const items = await retrieveOpenAIConversationItems(conversationId);
+    console.log('Conversation items:', items);
+    return { data: items };
+  } catch (error) {
+    console.error('Error fetching conversation:', error);
+    return { error: 'Failed to fetch conversation history' };
+  }
+}

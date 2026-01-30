@@ -1,8 +1,12 @@
 import { convertOpenAIConversationItemsToAIMessages } from '@/lib/utils';
 import { DEFAULT_USER_ID } from '@/lib/constants';
+import {
+  listConversations,
+  createConversation as createConversationAction,
+  getConversationHistory,
+} from '@/app/actions/conversations';
 import { UIMessage } from '@ai-sdk/react';
 import { useCallback, useEffect, useState } from 'react';
-
 
 /**
  * Conversation UI representation
@@ -14,25 +18,29 @@ export interface ConversationListItem {
 }
 
 export function useConversationList() {
+
+  /**
+   * UI state for conversation list
+   */
   const [conversationList, setConversationList] = useState<ConversationListItem[]>([]);
+
+  /**
+   * UI state of the active conversation
+   */
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
 
   /**
-   * Fetch conversations from the backend
+   * Fetch conversations from the backend and update the UI state
    */
   const fetchConversations = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/conversations?userId=${DEFAULT_USER_ID}`);
-      if (res.ok) {
-        const data = await res.json();
-        const conversations = data.data || [];
-        const sortedConversations = [...conversations].sort(
-          (a: ConversationListItem, b: ConversationListItem) => b.createdAt - a.createdAt
-        );
-        setConversationList(sortedConversations);
-      }
-    } catch (error) {
-      console.error('Failed to fetch conversations:', error);
+    const result = await listConversations(DEFAULT_USER_ID);
+    if (result.data) {
+      const sortedConversations = [...result.data].sort(
+        (a: ConversationListItem, b: ConversationListItem) => b.createdAt - a.createdAt
+      );
+      setConversationList(sortedConversations);
+    } else if (result.error) {
+      console.error('Failed to fetch conversations:', result.error);
     }
   }, []);
 
@@ -54,18 +62,14 @@ export function useConversationList() {
    * Returns the messages or empty array on failure.
    */
   const loadConversationHistory = useCallback(async (id: string): Promise<UIMessage[]> => {
-    try {
-      const res = await fetch(`/api/conversations/${id}`);
-      if (res.ok) {
-        const data = await res.json();
-        return convertOpenAIConversationItemsToAIMessages(data);
-      }
-      console.error('Failed to fetch conversation history');
-      return [];
-    } catch (error) {
-      console.error('Error loading conversation:', error);
-      return [];
+    const result = await getConversationHistory(id);
+    if (result.data) {
+      return convertOpenAIConversationItemsToAIMessages(result.data);
     }
+    if (result.error) {
+      console.error('Failed to fetch conversation history:', result.error);
+    }
+    return [];
   }, []);
 
   /**
@@ -74,26 +78,17 @@ export function useConversationList() {
    * Returns the new conversation ID.
    */
   const createConversation = useCallback(async (): Promise<string | null> => {
-    try {
-      const res = await fetch('/api/conversations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: DEFAULT_USER_ID }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const newId = data.id;
-        setActiveConversationId(newId);
-        // Schedule polls to pick up the title once generated
-        scheduleTitlePolls();
-        return newId;
-      }
-      console.error('Failed to create conversation');
-      return null;
-    } catch (error) {
-      console.error('Error creating conversation:', error);
-      return null;
+    const result = await createConversationAction(DEFAULT_USER_ID);
+    if (result.data) {
+      const newId = result.data.id;
+      setActiveConversationId(newId);
+      scheduleTitlePolls();
+      return newId;
     }
+    if (result.error) {
+      console.error('Failed to create conversation:', result.error);
+    }
+    return null;
   }, [scheduleTitlePolls]);
 
   /**
