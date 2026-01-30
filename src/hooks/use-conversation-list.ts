@@ -3,7 +3,7 @@ import { DEFAULT_USER_ID } from '@/lib/constants';
 import {
   listConversations,
   createConversation as createConversationAction,
-  getConversationHistory,
+  getConversationItems,
 } from '@/app/actions/conversations';
 import { UIMessage } from '@ai-sdk/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -55,12 +55,12 @@ export function useConversationList() {
    * Returns the messages or empty array on failure.
    */
   const loadConversationHistory = useCallback(async (id: string): Promise<UIMessage[]> => {
-    const result = await getConversationHistory(id);
+    const result = await getConversationItems(id);
     if (result.data) {
       return convertOpenAIConversationItemsToAIMessages(result.data);
     }
     if (result.error) {
-      console.error('Failed to fetch conversation history:', result.error);
+      console.error('Failed to fetch conversation items:', result.error);
     }
     return [];
   }, []);
@@ -85,7 +85,7 @@ export function useConversationList() {
   }, [scheduleTitlePolls]);
 
   /**
-   * Fetch conversations on mount
+   * Fetch conversations (metadata) on mount
    */
   useEffect(() => {
     fetchConversations();

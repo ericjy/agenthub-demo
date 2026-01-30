@@ -43,9 +43,9 @@ class ConversationService {
   }
 
   /**
-   * Gets conversation history by ID.
+   * Gets conversation items by ID.
    */
-  async getConversationHistory(conversationId: string): Promise<any> {
+  async getConversationItems(conversationId: string): Promise<any> {
     return await retrieveOpenAIConversationItems(conversationId);
   }
 

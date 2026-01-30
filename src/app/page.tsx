@@ -34,7 +34,7 @@ export default function Chat() {
   });
 
   // Auto-scroll when messages change
-  const scrollRef = useAutoScroll(messages);
+  const scrollRef = useAutoScroll(messages, activeConversationId);
 
   // Handle UI action on starting a new chat
   const handleStartNewChat = useCallback(() => {

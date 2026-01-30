@@ -35,12 +35,12 @@ export async function createConversation(userId: string) {
 /**
  * Get conversation history by ID
  */
-export async function getConversationHistory(conversationId: string) {
+export async function getConversationItems(conversationId: string) {
   try {
     if (!conversationId) {
       return { error: 'Conversation ID is required' };
     }
-    const items = await conversationService.getConversationHistory(conversationId);
+    const items = await conversationService.getConversationItems(conversationId);
     console.log('Conversation items:', items);
     return { data: items };
   } catch (error) {

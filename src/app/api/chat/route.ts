@@ -20,6 +20,7 @@ export async function POST(req: Request) {
     enableWebSearch: boolean;
   } = await req.json();
 
+  // validate request
   if (!conversationId) {
     return NextResponse.json(
       { error: 'conversationId is required' },
@@ -27,6 +28,7 @@ export async function POST(req: Request) {
     );
   }
 
+  // call AI SDK to process user message and stream the response
   const result = streamText({
     prompt: userMessage,
     model: ociOpenAI(model),
@@ -47,5 +49,6 @@ export async function POST(req: Request) {
     },
   });
 
+  // return the response as a UI message stream response
   return result.toUIMessageStreamResponse();
 }
