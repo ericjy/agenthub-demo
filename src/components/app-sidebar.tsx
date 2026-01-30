@@ -5,11 +5,10 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail
+  SidebarRail,
 } from "@/components/ui/sidebar"
 import { NavMain } from "./nav-main"
 import { NavHeader } from "./nav-header"
-
 
 export function AppSidebar() {
   return (

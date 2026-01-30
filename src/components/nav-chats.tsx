@@ -1,12 +1,11 @@
 "use client"
 
-
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
 export function NavChats({

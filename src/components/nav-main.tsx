@@ -5,7 +5,7 @@ import { Plus, Search } from "lucide-react"
 import {
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
 const menuItems = [
