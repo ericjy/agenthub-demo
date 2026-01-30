@@ -8,22 +8,33 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+interface Conversation {
+  id: string
+  createdAt: number
+  title?: string
+}
+
 export function NavChats({
-  chats,
+  conversations,
+  activeConversationId,
+  onSelectConversation,
 }: {
-  chats: {
-    title: string
-    url: string
-  }[]
+  conversations: Conversation[]
+  activeConversationId: string | null
+  onSelectConversation: (id: string) => void
 }) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Your Chats</SidebarGroupLabel>
       <SidebarMenu>
-        {chats.map((chat) => (
-          <SidebarMenuItem key={chat.title}>
-            <SidebarMenuButton tooltip={chat.title}>
-              <span>{chat.title}</span>
+        {conversations.map((conversation) => (
+          <SidebarMenuItem key={conversation.id}>
+            <SidebarMenuButton
+              tooltip={conversation.title || "Untitled Conversation"}
+              isActive={activeConversationId === conversation.id}
+              onClick={() => onSelectConversation(conversation.id)}
+            >
+              <span>{conversation.title || "Untitled Conversation"}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

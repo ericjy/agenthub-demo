@@ -1,6 +1,6 @@
 "use client"
 
-import { Plus, Search } from "lucide-react"
+import { Plus } from "lucide-react"
 
 import {
   SidebarMenu,
@@ -8,30 +8,15 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-const menuItems = [
-  {
-    title: "New Chat",
-    url: "#",
-    icon: Plus,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-]
-
-export function NavMain() {
+export function NavMain({ onNewChat }: { onNewChat: () => void }) {
   return (
     <SidebarMenu>
-      {menuItems.map((item) => (
-        <SidebarMenuItem key={item.title}>
-          <SidebarMenuButton tooltip={item.title}>
-            {item.icon && <item.icon />}
-            <span>{item.title}</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      ))}
+      <SidebarMenuItem>
+        <SidebarMenuButton tooltip="New Chat" onClick={onNewChat}>
+          <Plus />
+          <span>New Chat</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
     </SidebarMenu>
   )
 }
