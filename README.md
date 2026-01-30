@@ -15,7 +15,7 @@ pnpm dev
 Step 3: Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 
-## How was this project scafforded?
+## How was this project scaffolded?
 ```
 pnpm create next-app@latest agenthub-demo --yes
 ```
