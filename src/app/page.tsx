@@ -17,23 +17,19 @@ export default function Chat() {
   const {
     conversationList,
     activeConversationId,
-    activeConversationIdRef,
     setActiveConversationId,
     loadConversationHistory,
-    pollForTitle,
+    createConversation,
   } = useConversationList();
 
   // useChatSession hook provides the chat session with AI SDK
-  const { messages, sendMessage, status, setMessages } = useChatSession({
-    activeConversationIdRef,
-    setActiveConversationId,
-    pollForTitle,
-  });
+  const { messages, sendMessage, status, setMessages } = useChatSession();
 
-  // useChatInput hook provides the chat input state and props
+  // useChatInput hook provides central chat input states (and is shared across the NewChatView and ActiveChatView)
   const { chatInputProps } = useChatInput({
     sendMessage,
-    activeConversationIdRef,
+    activeConversationId,
+    createConversation,
     status,
   });
 

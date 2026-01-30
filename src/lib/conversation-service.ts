@@ -72,11 +72,26 @@ export async function listConversationsByUserId(userId?: string): Promise<Conver
 }
 
 /**
+ * Gets a conversation from the registry by ID.
+ */
+export function getConversation(conversationId: string): ConversationRegistryItem | undefined {
+  return conversationRegistry.find(c => c.id === conversationId);
+}
+
+/**
  * Generates a title for a conversation based on the first message and updates the registry.
+ * Only generates if the conversation doesn't already have a title.
  * This is intended to be run in the background after the first message is sent.
  */
-export async function generateAndSetConversationTitle(conversationId: string, firstMessage: string): Promise<void> {
+export async function assignConversationTitleIfAbsent(conversationId: string, firstMessage: string): Promise<void> {
   try {
+    // Check if conversation already has a title
+    const conversation = getConversation(conversationId);
+    if (conversation?.title) {
+      console.log(`Conversation ${conversationId} already has title: ${conversation.title}, skipping generation`);
+      return;
+    }
+
     console.log(`Generating title for conversation ${conversationId}...`);
     const { text: title } = await generateText({
       // use a smaller model for title generation

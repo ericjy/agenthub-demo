@@ -1,29 +1,25 @@
 import { convertOpenAIConversationItemsToAIMessages } from '@/lib/utils';
 import { DEFAULT_USER_ID } from '@/lib/constants';
-import { useConversationTitlePolling } from '@/hooks/use-conversation-title-polling';
 import { UIMessage } from '@ai-sdk/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-export interface ConversationData {
+
+/**
+ * Conversation UI representation
+ */
+export interface ConversationListItem {
   id: string;
   createdAt: number;
   title?: string;
 }
 
 export function useConversationList() {
-  const [conversationList, setConversationList] = useState<ConversationData[]>([]);
+  const [conversationList, setConversationList] = useState<ConversationListItem[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
 
   /**
-   * Ref to track active conversation ID for use in callbacks without stale closures.
+   * Fetch conversations from the backend
    */
-  const activeConversationIdRef = useRef<string | null>(null);
-
-  // Keep the ref in sync with the state
-  useEffect(() => {
-    activeConversationIdRef.current = activeConversationId;
-  }, [activeConversationId]);
-
   const fetchConversations = useCallback(async () => {
     try {
       const res = await fetch(`/api/conversations?userId=${DEFAULT_USER_ID}`);
@@ -31,7 +27,7 @@ export function useConversationList() {
         const data = await res.json();
         const conversations = data.data || [];
         const sortedConversations = [...conversations].sort(
-          (a: ConversationData, b: ConversationData) => b.createdAt - a.createdAt
+          (a: ConversationListItem, b: ConversationListItem) => b.createdAt - a.createdAt
         );
         setConversationList(sortedConversations);
       }
@@ -40,15 +36,17 @@ export function useConversationList() {
     }
   }, []);
 
-  const { pollForTitle } = useConversationTitlePolling(
-    conversationList,
-    setConversationList,
-    fetchConversations
-  );
-
-  // Fetch conversations on mount
-  useEffect(() => {
-    fetchConversations();
+  /**
+   * Schedule background polls to fetch conversation list for title updates.
+   * Polls at 2s, 7s (2+5), and 17s (2+5+10) after creation.
+   */
+  const scheduleTitlePolls = useCallback(() => {
+    const delays = [2000, 7000, 17000];
+    delays.forEach((delay) => {
+      setTimeout(() => {
+        fetchConversations();
+      }, delay);
+    });
   }, [fetchConversations]);
 
   /**
@@ -70,12 +68,46 @@ export function useConversationList() {
     }
   }, []);
 
+  /**
+   * Create a new conversation and set it as active.
+   * Schedules background polls to fetch title once generated.
+   * Returns the new conversation ID.
+   */
+  const createConversation = useCallback(async (): Promise<string | null> => {
+    try {
+      const res = await fetch('/api/conversations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: DEFAULT_USER_ID }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const newId = data.id;
+        setActiveConversationId(newId);
+        // Schedule polls to pick up the title once generated
+        scheduleTitlePolls();
+        return newId;
+      }
+      console.error('Failed to create conversation');
+      return null;
+    } catch (error) {
+      console.error('Error creating conversation:', error);
+      return null;
+    }
+  }, [scheduleTitlePolls]);
+
+  /**
+   * Fetch conversations on mount
+   */
+  useEffect(() => {
+    fetchConversations();
+  }, [fetchConversations]);
+
   return {
     conversationList,
     activeConversationId,
-    activeConversationIdRef,
     setActiveConversationId,
     loadConversationHistory,
-    pollForTitle,
+    createConversation,
   };
 }
