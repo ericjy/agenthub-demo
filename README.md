@@ -6,13 +6,18 @@ This is an demo application to show how to build a ChatGPT-like Agentic Chatbot 
 
 Step 1: Clone this repo to local.
 
-Step 2: Run the development server:
+Step 2: Set environment variable
+```bash
+export OCI_GENAI_API_KEY=sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+Step 3: Run the development server:
 
 ```bash
 pnpm dev
 ```
 
-Step 3: Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Step 4: Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## How was this project scaffolded?
 
