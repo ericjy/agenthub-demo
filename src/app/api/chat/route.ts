@@ -4,6 +4,10 @@ import { openai, OpenAIResponsesProviderOptions } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { NextResponse } from 'next/server';
 
+// Force Node.js runtime for better memory persistence
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 /**
  * API route for sending a user message to the model on an existing conversation.
  */

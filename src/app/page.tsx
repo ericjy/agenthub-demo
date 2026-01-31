@@ -59,7 +59,6 @@ export default function Chat() {
   // the user sends their first message rather than waiting for the server to return a conversation ID.
   const isNewChat = activeConversationId === null && messages.length === 0;
 
-
   return (
     <SidebarProvider>
       <AppSidebar
