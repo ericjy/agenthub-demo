@@ -124,6 +124,15 @@
   }
 }
 
+[data-streamdown="link"] { 
+  text-underline-offset: 3px;
+}
+
+[data-streamdown="link-safety-modal"] > div {
+  max-width: 40rem;
+}
+
+
 [data-streamdown="code-block"] {
   margin-top: 0.5em;
 }
