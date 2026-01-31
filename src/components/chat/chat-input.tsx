@@ -32,8 +32,10 @@ export function ChatInput({
   status,
 }: ChatInputProps) {
   return (
-    <PromptInput onSubmit={onSubmit} globalDrop multiple>
+    <PromptInput onSubmit={onSubmit} globalDrop multiple inputGroupClassName="rounded-2xl">
       <PromptInputBody>
+
+        { /* Prompt input textarea */ }
         <PromptInputTextarea
           onChange={(e) => onInputChange(e.target.value)}
           value={inputValue}
@@ -42,6 +44,8 @@ export function ChatInput({
       </PromptInputBody>
       <PromptInputFooter>
         <PromptInputTools>
+
+          { /* Action menus (add attachments, and more) */ }
           <PromptInputActionMenu>
             <PromptInputActionMenuTrigger />
             <PromptInputActionMenuContent>
@@ -49,6 +53,7 @@ export function ChatInput({
             </PromptInputActionMenuContent>
           </PromptInputActionMenu>
 
+          { /* Web search toggle */ }
           <PromptInputButton
             variant={enableWebSearch ? 'default' : 'ghost'}
             onClick={onToggleWebSearch}
@@ -57,6 +62,7 @@ export function ChatInput({
             <span>Search</span>
           </PromptInputButton>
 
+          { /* Model selector */ }
           <PromptInputSelect onValueChange={onModelChange} value={model}>
             <PromptInputSelectTrigger>
               <PromptInputSelectValue />
@@ -69,6 +75,7 @@ export function ChatInput({
               ))}
             </PromptInputSelectContent>
           </PromptInputSelect>
+
         </PromptInputTools>
         <PromptInputSubmit disabled={!inputValue && !status} status={status} />
       </PromptInputFooter>
