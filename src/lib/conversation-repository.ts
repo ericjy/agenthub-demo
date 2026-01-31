@@ -25,7 +25,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 function createDbClient(): Client {
 
   // Production mode: use Turso
-  if (!isProduction) {
+  if (isProduction) {
     return createClient({
       url: process.env.TURSO_DATABASE_URL!,
       authToken: process.env.TURSO_AUTH_TOKEN,
