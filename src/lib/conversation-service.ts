@@ -6,7 +6,6 @@ import { generateText } from 'ai';
  * Service for managing conversations.
  */
 class ConversationService {
-
   /**
    * Creates a new conversation.
    */
@@ -21,7 +20,7 @@ class ConversationService {
 
     return {
       id: conversationId,
-      createdAt: createdAt
+      createdAt: createdAt,
     };
   }
 
@@ -29,17 +28,14 @@ class ConversationService {
    * Lists all conversations for a user.
    */
   async listConversations(userId?: string): Promise<Conversation[]> {
-    if (userId) {
-      return conversationRepository.filter(item => item.userId === userId);
-    }
-    return [...conversationRepository];
+    return conversationRepository.findAll(userId);
   }
 
   /**
-   * Gets a conversation (metadata)by ID.
+   * Gets a conversation (metadata) by ID.
    */
   async getConversation(conversationId: string): Promise<Conversation | undefined> {
-    return conversationRepository.find(c => c.id === conversationId);
+    return conversationRepository.findById(conversationId);
   }
 
   /**
@@ -53,9 +49,8 @@ class ConversationService {
    * Updates the title of a conversation in the repository.
    */
   async updateConversationTitle(conversationId: string, title: string): Promise<void> {
-    const existingIndex = conversationRepository.findIndex(c => c.id === conversationId);
-    if (existingIndex > -1) {
-      conversationRepository[existingIndex].title = title;
+    const updated = await conversationRepository.updateTitle(conversationId, title);
+    if (updated) {
       console.log(`Updated conversation ${conversationId} title to: ${title}`);
     } else {
       console.warn(`Could not find conversation ${conversationId} to update title`);
@@ -93,27 +88,12 @@ class ConversationService {
    * Saves a conversation to the repository.
    */
   async saveConversation(conversationId: string, userId: string, createdAt?: number, title?: string): Promise<void> {
-    const existingIndex = conversationRepository.findIndex(c => c.id === conversationId);
-
-    if (existingIndex > -1) {
-      // Update existing conversation
-      const existingItem = conversationRepository[existingIndex];
-      conversationRepository[existingIndex] = {
-        ...existingItem,
-        userId,
-        createdAt: createdAt || existingItem.createdAt,
-        title: title || existingItem.title
-      };
-    } else {
-      // Create new conversation
-      conversationRepository.push({
-        id: conversationId,
-        userId,
-        createdAt: createdAt || Date.now(),
-        title
-      });
-    }
-
+    await conversationRepository.save({
+      id: conversationId,
+      userId,
+      createdAt: createdAt || Date.now(),
+      title,
+    });
     console.log(`Saved conversation ${conversationId} for user ${userId}${title ? ` with title: ${title}` : ''}`);
   }
 }

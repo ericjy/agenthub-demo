@@ -6,9 +6,9 @@ This is an demo application to show how to build a ChatGPT-like Agentic Chatbot 
 
 Step 1: Clone this repo to local.
 
-Step 2: Set environment variable
+Step 2: Set environment variable in .env.development.local
 ```bash
-export OCI_GENAI_API_KEY=sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+mv env.development.local.example .env.development.local
 ```
 
 Step 3: Run the development server:

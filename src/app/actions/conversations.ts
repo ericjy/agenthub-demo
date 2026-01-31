@@ -8,7 +8,7 @@ import { conversationService } from '@/lib/conversation-service';
 export async function listConversations(userId: string) {
   try {
     const conversations = await conversationService.listConversations(userId);
-    console.log(`Fetching conversations. Registry contains ${conversations.length} items for user ${userId}`);
+    console.log(`Listed ${conversations.length} conversations for user ${userId}`);
     return { data: conversations };
   } catch (error) {
     console.error('Error fetching conversations:', error);
@@ -25,6 +25,7 @@ export async function createConversation(userId: string) {
       return { error: 'userId is required' };
     }
     const conversation = await conversationService.createConversation(userId);
+    console.log('Created conversation:', conversation);
     return { data: conversation };
   } catch (error: any) {
     console.error('Error creating conversation:', error);
@@ -41,7 +42,7 @@ export async function getConversationItems(conversationId: string) {
       return { error: 'Conversation ID is required' };
     }
     const items = await conversationService.getConversationItems(conversationId);
-    console.log('Conversation items:', items);
+    console.log('Retrieved conversation items:', items);
     return { data: items };
   } catch (error) {
     console.error('Error fetching conversation:', error);
