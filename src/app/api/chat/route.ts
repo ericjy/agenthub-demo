@@ -3,10 +3,7 @@ import { ociOpenAI } from '@/lib/oci-openai';
 import { openai, OpenAIResponsesProviderOptions } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { NextResponse } from 'next/server';
-
-// Force Node.js runtime for better memory persistence
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+import { waitUntil } from '@vercel/functions';
 
 /**
  * API route for sending a user message to the model on an existing conversation.
@@ -46,7 +43,10 @@ export async function POST(req: Request) {
       } satisfies OpenAIResponsesProviderOptions,
     },
     onFinish: () => {
-      conversationService.assignConversationTitleIfAbsent(conversationId, userMessage);
+      // Use waitUntil to ensure background title generation completes before instance terminates
+      waitUntil(
+        conversationService.assignConversationTitleIfAbsent(conversationId, userMessage)
+      );
     },
     onError: (error) => {
       console.error('Stream error:', error);

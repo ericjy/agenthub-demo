@@ -2,10 +2,6 @@
 
 import { conversationService } from '@/lib/conversation-service';
 
-// Force Node.js runtime for better memory persistence
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
-
 /**
  * List all conversations for a user
  */
