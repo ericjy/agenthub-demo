@@ -1,6 +1,6 @@
 "use client"
 
-import { Plus } from "lucide-react"
+import { SquarePen } from "lucide-react"
 
 import {
   SidebarMenu,
@@ -13,7 +13,7 @@ export function NavMain({ onNewChat }: { onNewChat: () => void }) {
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuButton tooltip="New Chat" onClick={onNewChat}>
-          <Plus />
+          <SquarePen />
           <span>New Chat</span>
         </SidebarMenuButton>
       </SidebarMenuItem>

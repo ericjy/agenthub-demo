@@ -24,7 +24,7 @@ export function NavChats({
   onSelectConversation: (id: string) => void
 }) {
   return (
-    <SidebarGroup>
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Your Chats</SidebarGroupLabel>
       <SidebarMenu>
         {conversations.map((conversation) => (

@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutGrid } from "lucide-react"
+import { Sparkles } from "lucide-react"
 
 import {
   SidebarMenu,
@@ -18,10 +18,13 @@ export function NavHeader() {
           asChild
           className="group-data-[collapsible=icon]:hidden"
         >
-          <a href="#">
-            <LayoutGrid className="size-3" />
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">Agent Hub Demo</span>
+          <a href="#" className="flex items-center gap-2.5">
+            <div className="flex size-7 items-center justify-center rounded-md bg-foreground">
+              <Sparkles className="size-4 text-background" />
+            </div>
+            <div className="grid flex-1 text-left leading-tight">
+              <span className="text-sm font-semibold">AgentHub</span>
+              <span className="text-[10px] text-muted-foreground">Demo</span>
             </div>
           </a>
         </SidebarMenuButton>
