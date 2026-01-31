@@ -48,11 +48,13 @@ export async function POST(req: Request) {
         conversationService.assignConversationTitleIfAbsent(conversationId, userMessage)
       );
     },
-    onError: (error) => {
-      console.error('Stream error:', error);
-    },
   });
 
-  // return the response as a UI message stream response
-  return result.toUIMessageStreamResponse();
+  // return the response as a UI message stream response 
+  return result.toUIMessageStreamResponse({
+    onError: (error: unknown) => {
+      console.error('Stream error:', error);
+      return 'An error occurred while processing your request';
+    },
+  });
 }
