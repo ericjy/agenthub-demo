@@ -16,6 +16,7 @@ import {
   ReasoningContent,
   ReasoningTrigger,
 } from '@/components/ai-elements/reasoning';
+import { WeatherToolCall } from '@/components/weather-tool-call';
 import { WebSearchToolCall } from '@/components/web-search-tool-call';
 import { UIMessage } from '@ai-sdk/react';
 import { ToolUIPart } from 'ai';
@@ -73,6 +74,13 @@ export function MessageList({ messages, status }: MessageListProps) {
                   return (
                     <WebSearchToolCall
                       key={`${message.id}-${i}-tool-web_search`}
+                      part={part as ToolUIPart}
+                    />
+                  );
+                case 'tool-weather':
+                  return (
+                    <WeatherToolCall
+                      key={`${message.id}-${i}-tool-weather`}
                       part={part as ToolUIPart}
                     />
                   );

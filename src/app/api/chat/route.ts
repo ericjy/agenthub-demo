@@ -1,9 +1,10 @@
 import { conversationService } from '@/lib/conversation-service';
 import { ociOpenAI } from '@/lib/oci-openai';
 import { openai, OpenAIResponsesProviderOptions } from '@ai-sdk/openai';
-import { streamText } from 'ai';
+import { stepCountIs, streamText, tool } from 'ai';
 import { NextResponse } from 'next/server';
 import { waitUntil } from '@vercel/functions';
+import z from 'zod';
 
 /**
  * API route for sending a user message to the model on an existing conversation.
@@ -33,7 +34,20 @@ export async function POST(req: Request) {
   const result = streamText({
     prompt: userMessage,
     model: ociOpenAI(model),
-    tools: enableWebSearch ? { web_search: openai.tools.webSearch() } : undefined,
+    tools: {
+      ...(enableWebSearch ? { web_search: openai.tools.webSearch() } : {}),
+      weather: tool({
+        description: 'Get the weather in a location',
+        inputSchema: z.object({
+          location: z.string().describe('The location to get the weather for'),
+        }),
+        execute: async ({ location }) => ({
+          location,
+          temperature: 72 + Math.floor(Math.random() * 21) - 10,
+        }),
+      }),
+    },
+    stopWhen: stepCountIs(5),
     providerOptions: {
       openai: {
         store: true,
