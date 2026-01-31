@@ -20,6 +20,17 @@ pnpm dev
 
 Step 4: Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+
+## What is the stack?
+- OCI Agent Hub (for Responses API and Conversations API)
+- Next.js (for full-stack application)
+- AI SDK (for model integration in Next.js)
+- Shadcn (for foundational UI components)
+- AI Elements (for AI related UI elements)
+- SQLite (for local database)
+- Turso (for SQLite in the cloud)
+
+
 ## How was this project scaffolded?
 
 ```
