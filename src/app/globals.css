@@ -123,3 +123,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+[data-streamdown="code-block"] {
+  margin-top: 0.5em;
+}
+
+[data-streamdown="code-block-header"] {
+  padding: 0.3rem 1rem;
+}
+
+[data-streamdown="code-block-body"] {
+  font-size: 0.8rem;
+  padding: 0.8rem 1rem;
+}
