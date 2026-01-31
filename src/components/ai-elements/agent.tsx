@@ -13,6 +13,7 @@ import { BotIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import { memo } from "react";
 import { CodeBlock } from "./code-block";
+import type * as AccordionPrimitive from "@radix-ui/react-accordion";
 
 export type AgentProps = ComponentProps<"div">;
 
@@ -75,12 +76,12 @@ export const AgentInstructions = memo(
   )
 );
 
-export type AgentToolsProps = ComponentProps<typeof Accordion>;
+export type AgentToolsProps = Omit<AccordionPrimitive.AccordionMultipleProps, "type">;
 
 export const AgentTools = memo(({ className, ...props }: AgentToolsProps) => (
   <div className={cn("space-y-2", className)}>
     <span className="font-medium text-muted-foreground text-sm">Tools</span>
-    <Accordion className="rounded-md border" type="multiple" {...props} />
+    <Accordion className="rounded-md border" {...props} type="multiple" />
   </div>
 ));
 
