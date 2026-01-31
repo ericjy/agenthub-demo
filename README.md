@@ -14,6 +14,7 @@ export OCI_GENAI_API_KEY=sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Step 3: Run the development server:
 
 ```bash
+pnpm install
 pnpm dev
 ```
 
