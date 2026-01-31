@@ -40,6 +40,7 @@ export function ChatInput({
           onChange={(e) => onInputChange(e.target.value)}
           value={inputValue}
           placeholder="Ask me anything..."
+          className="px-6 py-6 text-base md:text-base"
         />
       </PromptInputBody>
       <PromptInputFooter>
@@ -77,7 +78,11 @@ export function ChatInput({
           </PromptInputSelect>
 
         </PromptInputTools>
-        <PromptInputSubmit disabled={!inputValue && !status} status={status} />
+        {/* Reset error status when user types new input, so submit button shows arrow instead of "X" */}
+        <PromptInputSubmit
+          disabled={!inputValue && !status}
+          status={status === 'error' && inputValue ? 'ready' : status}
+        />
       </PromptInputFooter>
     </PromptInput>
   );

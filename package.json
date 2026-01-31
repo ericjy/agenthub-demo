@@ -11,9 +11,9 @@
     "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@libsql/client": "^0.14.0",
     "@ai-sdk/openai": "^3.0.23",
     "@ai-sdk/react": "^3.0.64",
+    "@libsql/client": "^0.14.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-collapsible": "^1.1.12",

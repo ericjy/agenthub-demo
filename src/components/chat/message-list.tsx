@@ -30,6 +30,7 @@ interface MessageListProps {
 export function MessageList({ messages, status }: MessageListProps) {
   return (
     <Conversation>
+      {/* { status } */}
       <ConversationContent>
         {messages.map((message) => (
           <div key={message.id}>
