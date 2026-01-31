@@ -16,6 +16,10 @@ export interface Conversation {
 // Using global to persist across hot reloads in development
 const globalStore = global as unknown as { conversationRepository: Conversation[] };
 
-export const conversationRepository = globalStore.conversationRepository || [];
+// Initialize the array on the global store if it doesn't exist
+if (!globalStore.conversationRepository) {
+  globalStore.conversationRepository = [];
+}
 
-if (process.env.NODE_ENV !== 'production') globalStore.conversationRepository = conversationRepository;
+// Always export the reference from the global store to ensure all imports use the same array instance
+export const conversationRepository = globalStore.conversationRepository;
